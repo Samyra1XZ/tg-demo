@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}*{box-sizing:border-box}[hidden]{display:none!important}</style>
+<title>Демо Telegram-проектов</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: шапка с вкладками, под ней один экран продукта, как его видит владелец */
+:root{
+  --bg:#0f1218;--panel:#171b23;--panel2:#1e2330;--line:#2a3040;
+  --fg:#e8ebf2;--muted:#8b93a7;--accent:#5b8cff;--ok:#2fbf71;--warn:#f0a531;--bad:#e5484d;--tg:#2aabee;
+  --display:"Unbounded",system-ui,sans-serif;--body:"Onest",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px;display:grid;gap:22px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(22px,4vw,32px);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-family:var(--display);font-weight:500;font-size:18px;margin:0}
+.lead{color:var(--muted);max-width:62ch;margin:6px 0 0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{font:600 14px var(--body);color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer}
+.tabs button[aria-selected=true]{color:#fff;background:var(--accent);border-color:var(--accent)}
+.tabs button:focus-visible,.side button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.intro{display:grid;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.intro p{margin:0;color:var(--muted);max-width:75ch}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.facts span{font:500 12.5px var(--mono);background:var(--panel2);border-radius:8px;padding:5px 9px;color:var(--fg)}
+.crm{display:grid;grid-template-columns:200px 1fr;gap:16px;margin-top:14px}
+.side{display:grid;gap:6px;align-content:start}
+.side button{display:flex;justify-content:space-between;align-items:center;font:500 14px var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left}
+.side button[aria-current=true]{border-color:var(--accent);background:var(--panel2)}
+.badge{font:600 11px var(--mono);background:var(--bad);color:#fff;border-radius:999px;padding:1px 7px}
+.main{display:grid;gap:14px;min-width:0}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:2px}
+.tile b{font:700 24px var(--display);font-variant-numeric:tabular-nums}
+.tile small{color:var(--muted);font-size:12px}
+.tile .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.bars{display:flex;align-items:flex-end;gap:4px;height:38px}
+.bars i{flex:1;background:var(--accent);border-radius:3px 3px 0 0;opacity:.85}
+.tablebox{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th{font:600 11px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tr.over td{background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.pill{font:600 12px var(--body);border-radius:999px;padding:2px 9px;display:inline-block}
+.p-ok{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.p-bad{background:color-mix(in srgb,var(--bad) 20%,transparent);color:#ff7b7f}
+.p-warn{background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn)}
+.p-n{background:var(--panel2)}
+.num{font-family:var(--mono);font-size:13px}
+.debt{color:#ff7b7f}
+.tgwrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.phone{background:#0e1621;border:1px solid var(--line);border-radius:18px;overflow:hidden;min-width:0}
+.phone header{display:flex;align-items:center;gap:10px;background:#17212b;padding:10px 14px}
+.ava{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:700 13px var(--body);color:#fff;flex:none}
+.phone header b{display:block;font-size:14px}
+.phone header small{color:var(--muted);font-size:12px}
+.chat{display:grid;gap:8px;padding:14px;max-height:540px;overflow-y:auto}
+.msg{max-width:88%;background:#182533;border-radius:12px 12px 12px 4px;padding:8px 11px;font-size:14px}
+.msg.me{justify-self:end;background:#2b5278;border-radius:12px 12px 4px 12px}
+.msg .src{font-size:12px;color:var(--tg);font-weight:600}
+.msg q{display:block;border-left:2px solid var(--tg);padding-left:8px;margin:5px 0;quotes:none;color:#d4dbe6}
+.msg .meta{font-size:11.5px;color:var(--muted)}
+.kb{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:6px}
+.kb span{background:#22303f;border-radius:7px;text-align:center;padding:5px 4px;font-size:12.5px}
+.circle{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#4a6a8a,#1d2e40);display:grid;place-items:center;font-size:12px;color:#cfe0f2;text-align:center;margin-bottom:6px}
+.steps{display:grid;gap:10px;min-width:0}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.step h3{margin:0 0 2px;font-size:15px}
+.step p{margin:0;color:var(--muted);font-size:14px}
+.note{color:var(--muted);font-size:13px;margin:0}
+@media (max-width:760px){.crm{grid-template-columns:1fr}.side{grid-template-columns:repeat(2,1fr)}.tiles{grid-template-columns:repeat(2,1fr)}.tgwrap{grid-template-columns:1fr}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <div>
+    <h1>Демо Telegram-проектов</h1>
+    <p class="lead">Две системы, которые я сделал, в том виде, в каком их видит владелец. Данные на этой странице вымышленные: настоящих клиентов показать не могу.</p>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="leads">Ловец лидов в чатах</button>
+    <button role="tab" aria-selected="false" data-tab="outreach">Рассылка с ИИ-продавцом</button>
+  </div>
+
+  <section id="leads" class="view" role="tabpanel">
+    <div class="tgwrap">
+      <div class="steps">
+        <div class="intro">
+          <h2>Ловец лидов в Telegram-чатах</h2>
+          <p>Люди пишут «ищу виллу», «нужен психолог», «где арендовать байк» в десятках чатов, и вручную это не выловить. Бот сидит в этих чатах и читает каждое сообщение, нейросеть отсеивает мусор и рекламу, а владелец получает готовую карточку лида со ссылкой на человека.</p>
+          <div class="facts"><span>54 чата под присмотром</span><span>~100 лидов в неделю</span><span>сам никому не пишет</span></div>
+        </div>
+        <div class="step"><h3>Слушает</h3><p>Подключается к чатам вашей ниши и читает их круглосуточно.</p></div>
+        <div class="step"><h3>Отсеивает</h3><p>Сначала быстрый фильтр по словам, потом ИИ решает: это человек с запросом или реклама и болтовня.</p></div>
+        <div class="step"><h3>Присылает</h3><p>Карточка с текстом запроса, названием чата и ссылкой на автора. Кнопки «Лид» и «Не лид» помогают настроить фильтр.</p></div>
+        <p class="note">Подходит для любой ниши: аренда жилья, практики и психология, услуги. Такой же бот работает у школы саморазвития.</p>
+      </div>
+      <div class="phone">
+        <header><div class="ava" style="background:var(--ok)">ЛД</div><div><b>Лиды · Бали</b><small>бот</small></div></header>
+        <div class="chat" id="lead-chat"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="outreach" class="view" role="tabpanel" hidden>
+    <div class="tgwrap">
+      <div class="steps">
+        <div class="intro">
+          <h2>Рассылка с ИИ-продавцом</h2>
+          <p>С аккаунта владельца его знакомым и базе уходит личное приглашение кружком. С теми, кто ответил, дальше переписывается ИИ в стиле владельца: отвечает на вопросы о продукте и доводит до «готов оплатить». Вопрос, на который у ИИ нет ответа, уходит владельцу в отдельный пульт.</p>
+          <div class="facts"><span>кружок + текст</span><span>темп под здоровье аккаунта</span><span>пульт владельца</span></div>
+        </div>
+        <div class="step"><h3>Приглашает</h3><p>Отправка по папке контактов, медленно и с паузами, чтобы аккаунт не получил ограничений.</p></div>
+        <div class="step"><h3>Ведёт диалог</h3><p>ИИ пишет как владелец: его обращение, длина сообщений, без канцелярита. Цену и условия берёт только из карточки продукта.</p></div>
+        <div class="step"><h3>Передаёт</h3><p>Готовых купить и вопросы без ответа бот отдаёт владельцу вместе с перепиской.</p></div>
+      </div>
+      <div class="phone">
+        <header><div class="ava" style="background:#c06cdb">ПВ</div><div><b>Павел</b><small>был недавно</small></div></header>
+        <div class="chat">
+          <div class="msg me"><div class="circle">кружок<br>0:42</div><div class="meta">Привет! Записал тебе пару слов про поездку на вулкан в декабре</div></div>
+          <div class="msg">О, интересно. А сколько дней и что по цене?</div>
+          <div class="msg me">Два дня: выезд вечером, на рассвете кратер и голубое пламя, вечером обратно. Всё включено: трансфер, отель, гид, маски. Хочешь, расскажу, как проходит подъём?</div>
+          <div class="msg">Да, я не очень спортивный, это реально?</div>
+          <div class="msg me">Реально, подъём около двух часов в спокойном темпе, гид идёт под самого медленного. В группе осталось четыре места. Забронировать тебе?</div>
+          <div class="msg">Давай, на двоих с женой</div>
+          <div class="msg me">Отлично, передаю Паше, он пришлёт реквизиты и подтвердит места 🙌</div>
+        </div>
+        <header style="border-top:1px solid var(--line)"><div class="ava" style="background:var(--warn)">!</div><div><b>Пульт владельца</b><small>Павел готов оплатить: 2 места, вулкан, декабрь. Переписка приложена.</small></div></header>
+      </div>
+    </div>
+  </section>
+
+  <p class="note">Данные на странице вымышленные. Настоящие системы работают у клиентов, их можно показать на созвоне.</p>
+</div>
+
+<script>
+const tabs=[...document.querySelectorAll('[role=tab]')];
+function show(id){
+  if(!['leads','outreach'].includes(id))id='leads';
+  tabs.forEach(t=>t.setAttribute('aria-selected',t.dataset.tab===id));
+  document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!==id);
+}
+tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.tab)));
+show(location.hash.slice(1));
+
+const L=[
+ ['Bali Villa Rent','Ищу виллу с 2 спальнями в Чангу на март, бюджет до 25 млн в месяц, с бассейном','Ольга К.','09:41'],
+ ['Аренда Бали · Букит','Кто сдаёт дом на Буките надолго, от полугода? Семья, двое детей','Mark','10:07'],
+ ['Canggu Housing','Need a room or small villa near Batu Bolong from Dec 1, monthly','Jess','10:32'],
+ ['Русские на Бали','Подскажите риелтора, хотим снять виллу в Убуде на зиму','Алина','11:15'],
+ ['Bali Long Term','Looking for 3BR villa Pererenan, budget 40-45M, from January','Daniel','11:48']];
+document.getElementById('lead-chat').innerHTML=L.map(l=>`<div class="msg"><div class="src">Новый лид · ${l[0]}</div><q>${l[1]}</q><div class="meta">${l[2]} · ${l[3]}</div><div class="kb"><span>✅ Лид</span><span>❌ Не лид</span><span>Написать</span></div></div>`).join('');
+</script>
+
+</body>
+</html>
